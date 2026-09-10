@@ -56,16 +56,12 @@ export default class PackageDescription extends LightningElement {
             .then(result => {
                 console.log('Package availability:', JSON.stringify(result));
 
-                // Salesforce Date values normally arrive as YYYY-MM-DD.
-                // Normalize the value so selection also works if the API
-                // returns an ISO datetime or Date-like value.
                 this.availableDates = (result || [])
                     .map(item => this.normalizeDate(item.Available_Date__c))
                     .filter(date => date);
 
                 console.log('Normalized available dates:', JSON.stringify(this.availableDates));
 
-                // Start a fresh booking flow.
                 this.startDate = null;
                 this.endDate = null;
                 this.showPackageDetails = true;
@@ -91,13 +87,10 @@ export default class PackageDescription extends LightningElement {
             return null;
         }
 
-        // Keep an already-correct Salesforce Date value unchanged.
         if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
             return value;
         }
 
-        // Handle ISO datetime values without allowing timezone conversion
-        // to move the date backward or forward.
         const match = String(value).match(/^(\d{4}-\d{2}-\d{2})/);
         return match ? match[1] : null;
     }
@@ -107,14 +100,12 @@ export default class PackageDescription extends LightningElement {
 
         const selectedDate = event.currentTarget.dataset.date;
 
-        // Empty calendar cells have no date and cannot be selected.
         if (!selectedDate) {
             return;
         }
 
         const normalizedSelectedDate = this.normalizeDate(selectedDate);
 
-        // Only dates returned by Package_Availability__c are selectable.
         if (!this.availableDates.includes(normalizedSelectedDate)) {
             console.log('Date is not available:', normalizedSelectedDate);
             return;
@@ -171,14 +162,15 @@ export default class PackageDescription extends LightningElement {
         console.log('Start Date:', this.startDate);
         console.log('End Date:', this.endDate);
 
-        // Close only the date-selection popup.
+        // Close the date-selection popup.
         this.showBookingModal = false;
 
-        // Keep package details visible, but remove Book Now.
-        this.showPackageDetails = true;
+        // STEP 3: remove the complete package-details section.
+        // This removes the package image, description, price and Book Now.
+        this.showPackageDetails = false;
         this.showBookNow = false;
 
-        // Show traveler details below the package details.
+        // Show only the Traveler Details component.
         this.showTravellers = true;
     }
 
