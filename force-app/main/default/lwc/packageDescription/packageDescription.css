@@ -1,169 +1,67 @@
 .backdrop {
     position: fixed;
-    top: 0  ;
+    top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-
     background: rgba(0, 0, 0, 0.6);
-
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-  
-
     z-index: 9998;
-   
 }
 
-
-/* .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10000;
-     width: 90%;              
-    max-width: 1100px; 
-}
-
-
-.modal-content {
-     background: #f2efef;
-    padding: 20px;
-    border-radius: 12px;
-    width: 800px;
-    height: 350px;
-    max-width: 200vw;
-    max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        position: relative;
-}
-
-
- .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    border: 0.5px solid #ccc;
-    background: transparent;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-
-.modal-body {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-
-.details-section {
-    flex: 1.2;
-    font-size: 16px;
-    line-height: 1.8;
-}
-
-
-.image-section {
-    margin-top: 50px;
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-
-.image-section img {
-    width: 20px;
-    height: 50px;
-  
-    border-radius: 12px;
-  
-}
-
-
-.price {
-    margin-top: 18px;
-    font-size: 18px;
-}
-.package-name {
-    font-size: 22px;
-    font-weight: 600;
-    text-align: center;
-    color: #7a4d97;
-    font-family: 'calibri', sans-serif; 
-}
-.book-btn{
-    border:2px solid #0070d2;
-    background-color: #0070d2;
-    color: white;
-    display: block;
-    margin-left: auto; 
-    margin-top: 10px;
-   
-   
-    border-radius: 6px;
-} */
-/* MODAL CONTAINER */
 .modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10000;
-
     width: 90%;
-    max-width: 1200px;   /* 👈 increase overall modal width */
+    max-width: 1200px;
 }
 
-/* CONTENT BOX */
 .modal-content {
     background: #f2efef;
     padding: 30px;
     border-radius: 16px;
-
-    width: 100%;         /* 👈 full width of modal */
-    max-height: 85vh;    /* 👈 responsive height */
+    width: 100%;
+    max-height: 85vh;
     overflow-y: auto;
-
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     position: relative;
 }
 
-/* FLEX LAYOUT */
 .modal-body {
     display: flex;
     align-items: flex-start;
     gap: 30px;
 }
+
 .date-container {
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .available-date {
-    background:#28a745;
-    color:white;
-    border:none;
-    border-radius:6px;
-    padding:8px 12px;
-    cursor:pointer;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
 }
 
 .available-date:hover {
-    opacity:0.9;
+    opacity: 0.9;
 }
-/* LEFT SIDE */
+
 .details-section {
     flex: 1.2;
     font-size: 16px;
     line-height: 1.8;
 }
 
-/* RIGHT SIDE */
 .image-section {
     flex: 1;
     display: flex;
@@ -171,25 +69,22 @@
     align-items: center;
 }
 
-/* ✅ FIX IMAGE SIZE */
 .image-section img {
     width: 100%;
-    max-width: 350px;   /* 👈 proper size */
-    height: auto;       /* 👈 maintain ratio */
+    max-width: 350px;
+    height: auto;
     border-radius: 12px;
     object-fit: cover;
 }
 
-/* TITLE */
 .package-name {
-    font-size: 26px;   /* 👈 bigger */
+    font-size: 26px;
     font-weight: 700;
     text-align: center;
     color: #7a4d97;
     margin-bottom: 20px;
 }
 
-/* BUTTON */
 .book-btn {
     border: 2px solid #0070d2;
     background-color: #0070d2;
@@ -201,7 +96,6 @@
     border-radius: 6px;
 }
 
-/* CLOSE BUTTON */
 .close-btn {
     position: absolute;
     top: 12px;
@@ -212,18 +106,13 @@
     cursor: pointer;
 }
 
-/* .custom-footer {
-    display: flex;
-    align-items: center;
-} */
-
 .right-section {
     margin-left: auto;
 }
 
 .left-sections {
-        display: flex;
-        gap: 10px;
+    display: flex;
+    gap: 10px;
     justify-content: space-between;
 }
 
@@ -246,17 +135,40 @@
 .day {
     padding: 10px;
     text-align: center;
-    cursor: pointer;
     border: 1px solid #ddd;
+    border-radius: 2px;
+    user-select: none;
 }
 
-.available {
+/* Only available dates are clickable. */
+.day.available {
     background: #d8f5d8;
+    color: #111;
+    cursor: pointer;
 }
 
-.selected {
+.day.available:hover {
+    background: #b9edb9;
+}
+
+/* Selected date is clearly highlighted. */
+.day.available.selected {
     background: #0176d3;
-    color: grey;
+    color: white;
+    font-weight: 700;
+    border-color: #0176d3;
+}
+
+/* Unavailable dates are visible but cannot be selected. */
+.day.unavailable {
+    background: #ffffff;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.day.empty {
+    visibility: hidden;
+    cursor: default;
 }
 
 .calendar-header {
@@ -270,10 +182,8 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.3);
-
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-
     z-index: 9998;
 }
 
