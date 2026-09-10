@@ -10,6 +10,7 @@ export default class PackageDescription extends LightningElement {
 
     @track showBookingModal = false;
     @track showPackageDetails = true;
+    @track showBookNow = true;
     @track showTravellers = false;
     @track calendarDays = [];
     @track monthYear;
@@ -59,9 +60,11 @@ export default class PackageDescription extends LightningElement {
                     item => item.Available_Date__c
                 );
 
+                // Start a fresh booking flow.
                 this.startDate = null;
                 this.endDate = null;
                 this.showPackageDetails = true;
+                this.showBookNow = true;
                 this.showTravellers = false;
                 this.showBookingModal = true;
 
@@ -133,9 +136,14 @@ export default class PackageDescription extends LightningElement {
         console.log('Start Date:', this.startDate);
         console.log('End Date:', this.endDate);
 
-        // Stay on the same page/component. Only change the visible step.
+        // Close only the date-selection popup.
         this.showBookingModal = false;
-        this.showPackageDetails = false;
+
+        // Keep package details visible, but remove Book Now.
+        this.showPackageDetails = true;
+        this.showBookNow = false;
+
+        // Show traveler details below the package details.
         this.showTravellers = true;
     }
 
