@@ -56,9 +56,14 @@ export default class PackageDescription extends LightningElement {
             .then(result => {
                 console.log('Package availability:', JSON.stringify(result));
 
-                this.availableDates = result.map(
-                    item => item.Available_Date__c
-                );
+                // Salesforce Date values normally arrive as YYYY-MM-DD.
+                // Normalize the value so selection also works if the API
+                // returns an ISO datetime or Date-like value.
+                this.availableDates = (result || [])
+                    .map(item => this.normalizeDate(item.Available_Date__c))
+                    .filter(date => date);
+
+                console.log('Normalized available dates:', JSON.stringify(this.availableDates));
 
                 // Start a fresh booking flow.
                 this.startDate = null;
@@ -81,35 +86,65 @@ export default class PackageDescription extends LightningElement {
             });
     }
 
+    normalizeDate(value) {
+        if (!value) {
+            return null;
+        }
+
+        // Keep an already-correct Salesforce Date value unchanged.
+        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            return value;
+        }
+
+        // Handle ISO datetime values without allowing timezone conversion
+        // to move the date backward or forward.
+        const match = String(value).match(/^(\d{4}-\d{2}-\d{2})/);
+        return match ? match[1] : null;
+    }
+
     handleDateSelect(event) {
+        event.stopPropagation();
+
         const selectedDate = event.currentTarget.dataset.date;
 
-        if (!this.availableDates.includes(selectedDate)) {
+        // Empty calendar cells have no date and cannot be selected.
+        if (!selectedDate) {
             return;
         }
 
-        if (this.startDate === selectedDate) {
+        const normalizedSelectedDate = this.normalizeDate(selectedDate);
+
+        // Only dates returned by Package_Availability__c are selectable.
+        if (!this.availableDates.includes(normalizedSelectedDate)) {
+            console.log('Date is not available:', normalizedSelectedDate);
+            return;
+        }
+
+        if (this.startDate === normalizedSelectedDate) {
             this.startDate = null;
             this.endDate = null;
         } else {
-            this.startDate = selectedDate;
+            this.startDate = normalizedSelectedDate;
 
             const duration = parseInt(this.packageData?.Days__c, 10) || 1;
-            const endDate = new Date(selectedDate);
+            const endDate = new Date(`${normalizedSelectedDate}T00:00:00`);
 
             endDate.setDate(endDate.getDate() + duration - 1);
-            this.endDate = endDate.toISOString().split('T')[0];
+            this.endDate = this.formatDate(endDate);
         }
+
+        console.log('Selected start date:', this.startDate);
+        console.log('Calculated end date:', this.endDate);
 
         this.generateCalendar();
     }
 
     handleStartDate(event) {
-        this.startDate = event.target.value;
+        this.startDate = this.normalizeDate(event.target.value);
     }
 
     handleEndDate(event) {
-        this.endDate = event.target.value;
+        this.endDate = this.normalizeDate(event.target.value);
     }
 
     confirmBooking() {
@@ -163,21 +198,27 @@ export default class PackageDescription extends LightningElement {
             days.push({
                 key: `empty-${i}`,
                 isEmpty: true,
-                className: 'day empty'
+                className: 'day empty',
+                fullDate: null
             });
         }
 
         for (let i = 1; i <= lastDay.getDate(); i++) {
             const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
 
+            const isAvailable = this.availableDates.includes(fullDate);
+            const isSelected = this.startDate === fullDate;
+
             let className = 'day';
 
-            if (this.availableDates.includes(fullDate)) {
-                className = 'day available';
+            if (isAvailable) {
+                className += ' available';
+            } else {
+                className += ' unavailable';
             }
 
-            if (this.startDate === fullDate) {
-                className = 'day selected';
+            if (isSelected) {
+                className = 'day available selected';
             }
 
             days.push({
@@ -185,7 +226,8 @@ export default class PackageDescription extends LightningElement {
                 day: i,
                 fullDate,
                 className,
-                isEmpty: false
+                isEmpty: false,
+                isAvailable
             });
         }
 
@@ -194,6 +236,10 @@ export default class PackageDescription extends LightningElement {
             month: 'long',
             year: 'numeric'
         });
+    }
+
+    formatDate(date) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
     previousMonth() {
