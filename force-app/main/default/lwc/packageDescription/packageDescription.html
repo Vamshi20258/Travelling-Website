@@ -8,7 +8,8 @@
 
                 <button class="close-btn" onclick={closeModal}>×</button>
 
-                <!-- STEP 1: PACKAGE DETAILS -->
+                <!-- STEP 1 / STEP 3: PACKAGE DETAILS -->
+                <!-- Package details remain visible after Next. -->
                 <template if:true={showPackageDetails}>
                     <h2 class="package-name">{packageData.Package_Name__c}</h2>
 
@@ -30,22 +31,25 @@
                         </div>
                     </div>
 
-                    <template lwc:if={pageName}>
-                        <lightning-button
-                            label="Confirm BookNow"
-                            class="book-btn1"
-                            data-id={packageData.Id}
-                            onclick={handleBooking}>
-                        </lightning-button>
-                    </template>
+                    <!-- BOOK NOW IS SHOWN ONLY BEFORE DATES ARE CONFIRMED. -->
+                    <template if:true={showBookNow}>
+                        <template lwc:if={pageName}>
+                            <lightning-button
+                                label="Confirm BookNow"
+                                class="book-btn1"
+                                data-id={packageData.Id}
+                                onclick={handleBooking}>
+                            </lightning-button>
+                        </template>
 
-                    <template lwc:else>
-                        <button
-                            class="book-btn"
-                            data-id={packageData.Id}
-                            onclick={handleBooking}>
-                            Book Now
-                        </button>
+                        <template lwc:else>
+                            <button
+                                class="book-btn"
+                                data-id={packageData.Id}
+                                onclick={handleBooking}>
+                                Book Now
+                            </button>
+                        </template>
                     </template>
                 </template>
 
@@ -132,6 +136,7 @@
                 </template>
 
                 <!-- STEP 3: TRAVELER DETAILS -->
+                <!-- Rendered in the same PackageDescription modal. -->
                 <template if:true={showTravellers}>
                     <c-travellers
                         package-id={packageData.Id}
