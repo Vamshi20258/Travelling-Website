@@ -8,8 +8,8 @@
 
                 <button class="close-btn" onclick={closeModal}>×</button>
 
-                <!-- STEP 1 / STEP 3: PACKAGE DETAILS -->
-                <!-- Package details remain visible after Next. -->
+                <!-- STEP 1: PACKAGE DETAILS + BOOK NOW -->
+                <!-- This entire section disappears after clicking Next. -->
                 <template if:true={showPackageDetails}>
                     <h2 class="package-name">{packageData.Package_Name__c}</h2>
 
@@ -31,7 +31,7 @@
                         </div>
                     </div>
 
-                    <!-- BOOK NOW IS SHOWN ONLY BEFORE DATES ARE CONFIRMED. -->
+                    <!-- BOOK NOW IS SHOWN ONLY BEFORE DATE CONFIRMATION. -->
                     <template if:true={showBookNow}>
                         <template lwc:if={pageName}>
                             <lightning-button
@@ -135,8 +135,8 @@
                     </section>
                 </template>
 
-                <!-- STEP 3: TRAVELER DETAILS -->
-                <!-- Rendered in the same PackageDescription modal. -->
+                <!-- STEP 3: ONLY TRAVELER DETAILS -->
+                <!-- After Next, package image, description, price and Book Now are all hidden. -->
                 <template if:true={showTravellers}>
                     <c-travellers
                         package-id={packageData.Id}
