@@ -1,0 +1,66 @@
+<template>
+    <div class="main-container">
+        <c-navigation-header></c-navigation-header>
+    <h1 class="title">Featured Travel Packages</h1>
+
+                <div class="search-box">
+                <input 
+                    type="text" 
+                    value={searchKey}
+                    oninput={handleSearchChange}
+                />
+                <button onclick={handleSearch}>Search</button>
+            </div>
+        </div>
+
+    <template if:true={visiblePackages}>
+
+        <div class="carousel-container">
+
+            <!-- LEFT ARROW -->
+            <button class="nav-btn left" onclick={prevSlide} disabled={isPrevDisabled}>❮</button>
+
+            <div class="card-grid">
+                <template for:each={visiblePackages} for:item="pkg">
+                    <div key={pkg.Id} class="travel-card">
+
+                        <div class="image-section">
+                            <lightning-formatted-rich-text value={pkg.Image_URL__c}></lightning-formatted-rich-text>
+                        </div>
+
+                        <div class="card-body">
+                            <h2 class="package-name">{pkg.Package_Name__c}</h2>
+
+                            <p class="location">
+                                📍 {pkg.Location__c}
+                            </p>
+
+                            <div class="price-section">
+                                ₹ {pkg.Price__c}
+                            </div>
+
+                            <button class="book-btn" data-id={pkg.Id} onclick={handleBooking}>
+                                Book Now
+                            </button>
+     
+
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+
+            <!-- RIGHT ARROW -->
+            <button class="nav-btn right" onclick={nextSlide}  disabled={isNextDisabled}>❯</button>
+
+        </div>
+                       <template if:true={showModal}>
+    <c-package-description
+        page-name={pageName}
+        package-data={selectedPackage}
+        onclose={handleCloseModal}>
+    </c-package-description>
+</template>
+    </template>
+    <c-footer></c-footer>
+</template>

@@ -1,0 +1,174 @@
+<template>
+    <c-navigation-header></c-navigation-header>
+
+    <!-- HERO -->
+    
+        <div class="hero" style={heroStyle}>
+            <h1 class="text">Explore The World</h1>
+            <p class="text">Discover amazing travel packages and book your dream trip</p>
+
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    placeholder="Search destinations..." 
+                    value={searchKey}
+                    oninput={handleSearchChange}
+                />
+                <button onclick={handleSearch}>Search</button>
+            </div>
+        </div>
+
+        <!-- PACKAGES -->
+        <div class="section">
+            <h2 class="spacing"><b>Top Rated Packages</b></h2>
+
+            <div class="carousel" onmouseover={pauseSlide} onmouseout={resumeSlide}>
+                <lightning-carousel disable-auto-scroll="false" scroll-duration="4">
+
+                    <div class="packages">
+
+                        <!-- LOOP START -->
+                        <template for:each={visiblePackages} for:item="pkg">
+                            <div key={pkg.Id} class="card">
+
+                                <div class="image-section">
+                                    <lightning-formatted-rich-text value={pkg.Image_URL__c}></lightning-formatted-rich-text>
+                                </div>
+
+                                <h3>{pkg.Package_Name__c}</h3>
+                                <p>📍 {pkg.Location__c}</p>
+                                <p>{pkg.Duration__c}</p>
+                                <p class="price">₹{pkg.Price__c}</p>
+
+                                <button 
+                                    class="details-btn"  
+                                    data-id={pkg.Id} 
+                                    onclick={handleClickDetails}>
+                                    View Details
+                                </button>
+
+                            </div>
+                        </template>
+                        <!-- LOOP END -->
+
+                    </div>
+
+                </lightning-carousel>
+            </div>
+            <p class="view-all" onclick={navigateFeatured}>View All Packages...</p>
+        </div>
+
+        <!-- TOP DESTINATIONS -->
+        <!-- <div class="section">
+            <h2>Top Destinations</h2>
+            <div class="destinations">
+                <template for:each={packages} for:item="pkg">
+                    <div key={pkg.Id} class="destination"  onclick={handleClickDetails} data-id={pkg.Id}>
+                        {pkg.Location__c}
+                    </div>
+                </template>
+            </div>
+        </div> -->
+
+        <div class="section">
+    <h2>Top Destinations</h2>
+
+    <div class="destinations">
+        <template for:each={destinations} for:item="dest">
+            
+            <div 
+                key={dest} 
+                class="destination"
+                onclick={handleDestinationClick}
+                data-name={dest}
+            >
+                {dest}
+            </div>
+
+        </template>
+    </div>
+</div>
+<div class="section about-us">
+    <h2 class="about-title">About Us</h2>
+
+    <div class="about-card">
+
+        <h3 class="about-heading">Your Journey, Our Passion ✈️</h3>
+
+        <p class="about-desc">
+            We are more than just a travel platform — we are your gateway to unforgettable experiences. 
+            Our mission is to make travel effortless, exciting, and accessible for everyone.
+        </p>
+
+        <p class="about-desc">
+            From serene beaches to thrilling adventures, we carefully design travel packages 
+            that bring comfort, joy, and exploration together in one place.
+        </p>
+
+        <p class="about-desc">
+            Every journey you take with us is crafted with care, ensuring memorable moments, 
+            seamless bookings, and experiences you'll cherish forever.
+        </p>
+
+        <!-- Highlight Cards -->
+        <div class="about-features">
+
+            <div class="feature-box">
+                <span>🌍</span>
+                <p>Global Destinations</p>
+            </div>
+
+            <div class="feature-box">
+                <span>💰</span>
+                <p>Affordable Pricing</p>
+            </div>
+
+            <div class="feature-box">
+                <span>⚡</span>
+                <p>Easy Booking</p>
+            </div>
+
+            <div class="feature-box">
+                <span>⭐</span>
+                <p>Trusted Experience</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+        <!-- REVIEWS -->
+        <div class="section">
+            <h2>Customer Reviews</h2>
+            <div class="reviews">
+                <div class="review">⭐⭐⭐⭐⭐ Amazing trip experience!</div>
+                <div class="review">⭐⭐⭐⭐⭐ Best travel portal.</div>
+                <div class="review">⭐⭐⭐⭐⭐ Very smooth booking process.</div>
+            </div>
+        </div>
+
+        <!-- ✅ MODAL (OUTSIDE LOOP) -->
+        <template if:true={isDetails}>
+            <c-package-description 
+                package-data={selectedPackage} 
+                onclose={closeDetails}>
+            </c-package-description>
+        </template>
+
+    
+
+    <!-- OTHER PAGES -->
+    <!-- <template if:true={isFeatured}>
+        <c-featured-packages></c-featured-packages>
+    </template>
+
+    <template if:true={isLogin}>
+        <c-travellogin></c-travellogin>
+    </template>
+
+    <template if:true={isBookings}>
+        <c-bookings></c-bookings>
+    </template> -->
+
+    <c-footer onnavigate={handleNavigation}></c-footer>
+</template>

@@ -1,0 +1,87 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: #528fe5; */
+    background-color: White;
+    padding: 10px 20px;
+    color: white;
+    height: auto;
+}
+
+/* LEFT MENU */
+.left-menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* MENU ITEMS */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* .menu-item:hover {
+    text-decoration: underline;
+    \
+} */
+
+/* RIGHT MENU */
+.right-menu {
+    cursor: pointer;
+}
+
+/* ICON COLOR */
+.icon {
+    --sds-c-icon-color-foreground-default: rgb(135, 177, 236) ;
+}
+.profile-icon {
+    --sds-c-icon-color-foreground-default: rgb(61, 194, 231);
+}
+.menu-text{
+    color: black;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Logo */
+.logo {
+    height: 50PX;
+    
+    width: auto;
+}
+
+/* Right menu */
+.right-menu {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Menu items */
+.menu-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 6px;
+}
+
+.menu-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Hover effect */
+.menu-item:hover {
+    color: #ff6600;
+}

@@ -1,0 +1,102 @@
+<template>
+    <div class="backdrop"></div>
+
+    <section class="modal">
+
+        <div class="modal-content">
+
+            <h2>Traveler Details</h2>
+
+            <div class="slds-m-bottom_medium">
+                <strong>Total Travelers: {totalTravelers}</strong>
+            </div>
+
+            <lightning-button
+                variant="brand"
+                label="Add Traveler"
+                onclick={addTraveler}>
+            </lightning-button>
+
+            <template for:each={travelers} for:item="traveler">
+
+                <div
+                    key={traveler.key}
+                    class="slds-box slds-m-top_medium">
+
+                    <h3>
+                        Traveler {traveler.displayNumber}
+                    </h3>
+
+                    <lightning-input
+                        label="Passenger Name"
+                        value={traveler.name}
+                        data-id={traveler.key}
+                        data-field="name"
+                        onchange={handleTravelerChange}
+                        required>
+                    </lightning-input>
+
+                    <lightning-input
+                        type="email"
+                        label="Email"
+                        value={traveler.email}
+                        data-id={traveler.key}
+                        data-field="email"
+                        onchange={handleTravelerChange}>
+                    </lightning-input>
+
+                    <lightning-input
+                        type="number"
+                        label="Age"
+                        value={traveler.age}
+                        data-id={traveler.key}
+                        data-field="age"
+                        onchange={handleTravelerChange}
+                        required>
+                    </lightning-input>
+
+                    <lightning-combobox
+                        label="Gender"
+                        value={traveler.gender}
+                        data-id={traveler.key}
+                        data-field="gender"
+                        options={genderOptions}
+                        onchange={handleTravelerChange}>
+                    </lightning-combobox>
+
+                    <div class="slds-m-top_small">
+
+                        <lightning-button
+                            variant="destructive"
+                            label="Remove"
+                            data-id={traveler.key}
+                            onclick={removeTraveler}>
+                        </lightning-button>
+
+                    </div>
+
+                </div>
+
+            </template>
+
+            <div class="slds-m-top_large slds-align_absolute-center">
+
+                <lightning-button
+                    label="Cancel"
+                    onclick={closeTravelerModal}>
+                </lightning-button>
+
+                <lightning-button
+                    class="slds-m-left_small"
+                    variant="brand"
+                    label="Confirm Booking"
+                    onclick={confirmBooking}>
+                </lightning-button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</template>

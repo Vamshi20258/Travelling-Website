@@ -1,0 +1,216 @@
+<template>
+    <template if:true={packageData}>
+
+        <div class="backdrop" onclick={closeModal}></div>
+
+        <section class="modal">
+            <div class="modal-content">
+
+                <button class="close-btn" onclick={closeModal}>×</button>
+
+                <h2 class="package-name">{packageData.Package_Name__c}</h2>
+
+
+
+                <div class="modal-body">
+
+                    <div class="details-section">
+                        <lightning-formatted-rich-text value={packageData.Description__c}>
+                        </lightning-formatted-rich-text>
+                        <div>
+                            <p class="price"><strong>Price:</strong> ₹{packageData.Price__c}</p>
+                        </div>
+                    </div>
+
+                    <div class="image-section">
+                        <lightning-formatted-rich-text value={packageData.Image_URL__c}>
+                        </lightning-formatted-rich-text>
+                    </div>
+
+                </div>
+                <template lwc:if={pageName}>
+                    <lightning-button label="Confirm BookNow" class="book-btn1" data-id={packageData.Id}
+                        onclick={handleBooking}>
+                    </lightning-button>
+                    <template if:true={showBookingModal}>
+                        <div class="modal-backdrop"></div>
+                        <section class="slds-modal slds-fade-in-open">
+
+
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium">
+                                    Select Travel Dates
+                                </h2>
+                            </header>
+
+                            <div class="slds-modal__content slds-p-around_medium">
+
+                                <div class="calendar">
+
+                                    <div class="calendar-header">
+                                        <lightning-button-icon icon-name="utility:chevronleft" onclick={previousMonth}>
+                                        </lightning-button-icon>
+
+                                        <h2>{monthYear}</h2>
+
+                                        <lightning-button-icon icon-name="utility:chevronright" onclick={nextMonth}>
+                                        </lightning-button-icon>
+                                    </div>
+
+                                    <div class="weekdays">
+                                        <span>Sun</span>
+                                        <span>Mon</span>
+                                        <span>Tue</span>
+                                        <span>Wed</span>
+                                        <span>Thu</span>
+                                        <span>Fri</span>
+                                        <span>Sat</span>
+                                    </div>
+
+                                    <div class="days">
+                                        <template for:each={calendarDays} for:item="day">
+                                            <div key={day.key} class={day.className} data-date={day.fullDate}
+                                                onclick={handleDateSelect}>
+                                                {day.day}
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <template if:true={startDate}>
+                                        <p class="slds-m-top_medium">
+                                            Check-In: {startDate}
+                                        </p>
+                                    </template>
+
+                                    <template if:true={endDate}>
+                                        <p>
+                                            Check-Out: {endDate}
+                                        </p>
+                                    </template>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                        <footer class="slds-modal__footer custom-footer">
+
+                            <div class="left-sections">
+                                <lightning-button label="Cancel" onclick={closeModalDate}>
+                                </lightning-button>
+                            </div>
+                       
+                                <lightning-button label="Next" variant="brand"
+                                    onclick={confirmBooking}>
+                                </lightning-button>
+                                    
+                        </footer>
+                        
+                       
+                    </section>
+                </template>
+                </template>
+
+
+
+                <template lwc:else>
+
+                    <button class="book-btn" data-id={packageData.Id} onclick={handleBooking}>
+                        Book Now
+                    </button>
+
+                    <!-- Booking Modal START -->
+                    <template if:true={showBookingModal}>
+                        <div class="modal-backdrop"></div>
+                        <section class="slds-modal slds-fade-in-open">
+
+
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium">
+                                    Select Travel Dates
+                                </h2>
+                            </header>
+
+                            <div class="slds-modal__content slds-p-around_medium">
+
+                                <div class="calendar">
+
+                                    <div class="calendar-header">
+                                        <lightning-button-icon icon-name="utility:chevronleft" onclick={previousMonth}>
+                                        </lightning-button-icon>
+
+                                        <h2>{monthYear}</h2>
+
+                                        <lightning-button-icon icon-name="utility:chevronright" onclick={nextMonth}>
+                                        </lightning-button-icon>
+                                    </div>
+
+                                    <div class="weekdays">
+                                        <span>Sun</span>
+                                        <span>Mon</span>
+                                        <span>Tue</span>
+                                        <span>Wed</span>
+                                        <span>Thu</span>
+                                        <span>Fri</span>
+                                        <span>Sat</span>
+                                    </div>
+
+                                    <div class="days">
+                                        <template for:each={calendarDays} for:item="day">
+                                            <div key={day.key} class={day.className} data-date={day.fullDate}
+                                                onclick={handleDateSelect}>
+                                                {day.day}
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <template if:true={startDate}>
+                                        <p class="slds-m-top_medium">
+                                            Check-In: {startDate}
+                                        </p>
+                                    </template>
+
+                                    <template if:true={endDate}>
+                                        <p>
+                                            Check-Out: {endDate}
+                                        </p>
+                                    </template>
+
+                                </div>
+
+                            </div>
+
+                            <footer class="slds-modal__footer">
+
+                                <div class="left-sections">
+                                    <lightning-button label="Cancel" onclick={closeModalDate}>
+                                    </lightning-button>
+
+
+
+                                    <lightning-button variant="brand" label="Next" onclick={confirmBooking}>
+                                    </lightning-button>
+
+                                </div>
+
+                            </footer>
+
+                        </section>
+                        
+
+                    </template>
+
+                </template>
+                <template if:true={isDataSelected}>
+                    <c-travellers package-id={packageData.Id}></c-travellers>
+                </template>
+
+            </div>
+
+        </section>
+
+
+
+    </template>

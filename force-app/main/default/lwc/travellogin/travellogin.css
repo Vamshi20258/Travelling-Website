@@ -1,0 +1,25 @@
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-input {
+    padding-right: 2.5rem;
+    /* space for icon */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 68%;
+    /* 🔥 THIS FIXES YOUR ISSUE */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.login-card {
+    background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+    /* light gradient */
+    padding: 20px;
+    border-radius: 12px;
+}

@@ -1,0 +1,41 @@
+<template>
+    <header class="header">
+
+        <!-- LEFT SIDE LOGO -->
+        <div class="logo-section" onclick={navigateHome}>
+            <img src={logoUrl} alt="Travel Portal Logo" class="logo"/>
+        </div>
+
+        <!-- RIGHT SIDE MENU -->
+        <div class="right-menu">
+
+            <div class="menu-item" onclick={navigateHome}>
+                <span class="menu-text">Home</span>
+            </div>
+
+            <div class="menu-item" onclick={navigateFeatured}>
+                <span class="menu-text">Featured Packages</span>
+            </div>
+
+            <div class="menu-item" onclick={navigateBookings}>
+                <span class="menu-text">My Bookings</span>
+            </div>
+
+            <!-- 🔥 LOGIN -->
+            <template if:false={isLoggedIn}>
+                <div class="menu-item" onclick={navigateProfile}>
+                    <span class="menu-text">Login</span>
+                </div>
+            </template>
+
+            <!-- 🔥 LOGOUT -->
+            <template if:true={isLoggedIn}>
+                <div class="menu-item" onclick={handleLogout}>
+                    <span class="menu-text">Logout</span>
+                </div>
+            </template>
+
+        </div>
+
+    </header>
+</template>

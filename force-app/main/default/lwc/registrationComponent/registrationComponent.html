@@ -1,0 +1,66 @@
+<template>
+    <c-navigation-header></c-navigation-header>
+    <div class="slds-grid slds-grid_align-center slds-p-around_medium">
+
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+
+            <div class="Registration-card slds-p-around_medium">
+
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    Create Your Travel Account
+                </h2>
+
+               
+                <lightning-input label="First Name" class="validate" value={firstName} data-field="firstName"
+                    onchange={handleChange}></lightning-input>
+
+             
+                <lightning-input label="Last Name" class="validate" value={lastName} data-field="lastName"
+                     onchange={handleChange}></lightning-input>
+
+            
+                <lightning-input type="email" class="validate" label="Email" value={email} data-field="email"
+                     onchange={handleChange}></lightning-input>
+
+               
+                <lightning-input label="Community Nickname" class="validate" value={communityNickname} data-field="communityNickname"
+                    onchange={handleChange}></lightning-input>
+
+
+                <lightning-input label="Username" class="validate" value={username} data-field="username"
+                    onchange={handleChange}></lightning-input>
+
+                <div class="password-container">
+
+                    <label class="slds-form-element__label">Password</label>
+
+                    <input class="slds-input password-input"  type={passwordType} value={password} data-field="password"
+                        oninput={handleChange} />
+
+                    <lightning-button-icon icon-name={iconName} onclick={togglePassword} variant="bare"
+                        class="eye-icon">
+                    </lightning-button-icon>
+
+                </div>
+
+
+
+
+          
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Create Account" onclick={handleRegister} variant="brand">
+                    </lightning-button>
+                </div>
+
+            
+                <p class="slds-m-top_small">
+                    Already have an account?
+                    <a href="#" onclick={openLogin}>Login</a>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+    <c-footer></c-footer>
+</template>

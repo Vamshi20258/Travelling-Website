@@ -1,0 +1,98 @@
+<template>
+    
+    <c-navigation-header></c-navigation-header>
+
+    <div class="main-container">
+        
+        <h1 class="title">🌍 My Bookings</h1>
+
+        <template if:true={bookings}>
+            <div class="booking-grid">
+
+                <template for:each={bookings} for:item="booking">
+
+                    <div key={booking.Id} class="booking-card">
+                        <!-- ❌ Cancel Icon -->
+                        <!-- <span class="cancel-icon" data-id={booking.Id} onclick={handleCancelClick}>
+        ✖
+    </span> -->
+                        <lightning-button-icon icon-name="utility:close" alternative-text="Delete"
+                            onclick={handleCancelClick} data-id={booking.Id} variant="bare" class="cancel-icon">
+                        </lightning-button-icon>
+
+                        <div class="card-header">
+                            ✈️ Travel Package
+                        </div>
+
+                        <div class="card-body">
+
+                            <h2 class="package-name">
+                               { booking.Travel_Package__r.Package_Name__c}
+                            </h2>
+
+                            <p class="date">
+                                📅 {booking.Travel_Date__c}
+                            </p>
+
+                            <p class="status {booking.Status__c}">
+                                {booking.Status__c}
+                            </p>
+
+                        </div>
+
+                    </div>
+                
+                
+
+                </template>
+
+            </div>
+                        <div>
+                            <hr />
+                </div>
+
+        </template>
+
+        <template if:false={bookings}>
+            <p class="no-data">No bookings found.</p>
+        </template>
+    </div>
+    <template if:true={showModal}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Confirm Delete</h2>
+                </header>
+
+                <!-- Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Are you sure you want to delete this booking?</p>
+                </div>
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+
+                    <div class="slds-grid slds-grid_align-spread">
+
+                        <!-- Left side -->
+                        <lightning-button variant="brand" label="No" onclick={handleCloseModal}>
+                        </lightning-button>
+
+                        <!-- Right side -->
+                        <lightning-button variant="brand" label="Yes" onclick={handleConfirmDelete}>
+                        </lightning-button>
+
+                    </div>
+
+                </footer>
+
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <c-footer></c-footer>
+  
+</template>

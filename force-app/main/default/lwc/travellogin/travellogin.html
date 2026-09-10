@@ -1,0 +1,68 @@
+<template>
+         <c-navigation-header></c-navigation-header>
+         
+    <div class="slds-grid slds-grid_align-center slds-p-around_medium">
+
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+
+            <!-- <div class="slds-card slds-p-around_medium"> -->
+
+                <!-- Title -->
+
+                <div class="login-card">
+
+                        <div>
+                                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    Login into Your Travel Account
+                </h2>
+                </div>
+
+                    <lightning-input label="Username" value={username} data-field="username" onchange={handleChange}>
+                    </lightning-input>
+
+                    <!-- <lightning-input type="password" label="Password" value={password} data-field="password"
+                        onchange={handleChange}>
+                    </lightning-input> -->
+
+                    <div class="password-container">
+
+                        <label class="slds-form-element__label">Password</label>
+
+                        <input class="slds-input password-input" type={passwordType} value={password}
+                            data-field="password" oninput={handleChange} />
+
+                        <lightning-button-icon icon-name={iconName} onclick={togglePassword} variant="bare"
+                            class="eye-icon">
+                        </lightning-button-icon>
+
+                    </div>
+
+                    <div class="slds-m-top_small slds-text-align_right">
+    <a onclick={handleForgotPassword}>Forgot Password?</a>
+</div>
+
+                     <div class="slds-m-top_medium">
+                    <lightning-button label="Login" variant="brand" onclick={handleLogin}>
+                    </lightning-button>
+                    </div>
+                    <div class="slds-m-top_small">
+                    <p>
+                        Don't have an account?
+                        <a onclick={openRegister}>Register</a>
+                    </p>
+                    </div>
+
+                    <template if:true={errorMessage}>
+                        <div style="color:red; margin-top:10px; font-weight:bold;">
+                            {errorMessage}
+                        </div>
+                    </template>
+
+                </div>
+
+            <!-- </div> -->
+        </div>
+    </div>
+    
+   <c-footer></c-footer>
+</template>

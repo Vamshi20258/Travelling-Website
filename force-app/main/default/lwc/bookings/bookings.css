@@ -1,0 +1,133 @@
+.main-container {
+    padding: 30px;
+    background: linear-gradient(to right, #eef2f3, #ffffff);
+    min-height: 100vh;
+}
+
+/* Title */
+.title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* Grid Layout */
+.booking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Card Styling */
+.booking-card {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+.cancel-icon {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 16px;
+    color: #ff4d4f;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.cancel-icon:hover {
+    transform: scale(1.2);
+    color: #d9363e;
+}
+
+/* Hover effect */
+.booking-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.card-header {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Body */
+.card-body {
+    padding: 20px;
+}
+
+/* Package Name */
+.package-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+/* Date */
+.date {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+/* Status Badge */
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Dynamic Status Colors */
+.status.Confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.Pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.Cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* No Data */
+.no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+}
+
+/* Force toast position to top-right
+.slds-notify_container {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 3rem !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 99999 !important;
+} */
+
+.toastPosition {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 3rem !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 99999 !important;
+}
