@@ -1,32 +1,29 @@
 import { LightningElement, api, track } from 'lwc';
-// import createBooking from '@salesforce/apex/TravelPackageController.createBooking';
 import Toast from 'lightning/toast';
 import ToastContainer from 'lightning/toastContainer';
-import { NavigationMixin } from 'lightning/navigation';
-import getPackageAvailability
-    from '@salesforce/apex/TravelPackageController.getPackageAvailability';
+import getPackageAvailability from '@salesforce/apex/TravelPackageController.getPackageAvailability';
 
-
-
-export default class PackageDescription extends NavigationMixin(LightningElement) {
+export default class PackageDescription extends LightningElement {
 
     @api packageData;
-    @api pageName; // ✅ NEW: receive page name for context
+    @api pageName;
+
     @track showBookingModal = false;
-    // startDate;
-    // endDate;
-    availableDates = [];
-    packageId;
+    @track showPackageDetails = true;
+    @track showTravellers = false;
     @track calendarDays = [];
     @track monthYear;
-    isDataSelected = false;
+    @track startDate;
+    @track endDate;
 
+    availableDates = [];
+    packageId;
+    today = new Date();
 
     connectedCallback() {
         console.log('Modal Loaded:', JSON.stringify(this.packageData));
         console.log('Page Name:', this.pageName);
 
-        // 🔥 Setup Toast Container (same as bookings)
         const container = ToastContainer.instance();
         container.maxToasts = 5;
         container.toastPosition = 'top-right';
@@ -41,150 +38,129 @@ export default class PackageDescription extends NavigationMixin(LightningElement
     }
 
     handleBooking(event) {
-
-        // Store Package Id
-        this.packageId = event.target.dataset.id;
+        this.packageId = event.currentTarget.dataset.id;
         console.log('Booking package ID:', this.packageId);
-        // Check login
+
         const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
-        // Guest User
-        if (!isLoggedIn) {
-
-            // Toast.show({
-            //     label: 'Login Required',
-            //     message: 'Please login to continue booking',
-            //     variant: 'warning'
-            // });
-
-            setTimeout(() => {
-                window.location.href = '/secur/logout.jsp?retUrl=/s/login';
-            }, 3000);
-
+        if (isLoggedIn !== 'true') {
+            console.log('User is not logged in. Redirecting to login page...');
+            window.location.href = '/travel/login';
             return;
         }
-        console.log('User is logged in, fetching availability...');
-        // Logged In User
+
         getPackageAvailability({
             packageId: this.packageId
         })
             .then(result => {
                 console.log('Package availability:', JSON.stringify(result));
 
-                this.availableDates =
-                    result.map(
-                        item => item.Available_Date__c
+                this.availableDates = result.map(
+                    item => item.Available_Date__c
+                );
 
-                    );
+                this.startDate = null;
+                this.endDate = null;
+                this.showPackageDetails = true;
+                this.showTravellers = false;
                 this.showBookingModal = true;
+
                 this.generateCalendar();
+            })
+            .catch(error => {
+                console.error('Error fetching package availability:', error);
 
-                console.log('Available dates:', JSON.stringify(this.availableDates));
-
-
+                Toast.show({
+                    label: 'Error',
+                    message: 'Unable to load package availability.',
+                    variant: 'error'
+                });
             });
     }
+
     handleDateSelect(event) {
+        const selectedDate = event.currentTarget.dataset.date;
 
-        this.startDate =
-            event.currentTarget.dataset.date;
+        if (!this.availableDates.includes(selectedDate)) {
+            return;
+        }
 
+        if (this.startDate === selectedDate) {
+            this.startDate = null;
+            this.endDate = null;
+        } else {
+            this.startDate = selectedDate;
 
+            const duration = parseInt(this.packageData?.Days__c, 10) || 1;
+            const endDate = new Date(selectedDate);
 
-        let start =
-            new Date(this.startDate);
+            endDate.setDate(endDate.getDate() + duration - 1);
+            this.endDate = endDate.toISOString().split('T')[0];
+        }
 
-        let end =
-            new Date(start);
-
-        end.setDate(
-            end.getDate() +
-            Number(this.packageData.Days__c)
-        );
-
-        this.endDate =
-            end.toISOString().split('T')[0];
+        this.generateCalendar();
     }
-    // START DATE
+
     handleStartDate(event) {
         this.startDate = event.target.value;
     }
 
-    // END DATE
     handleEndDate(event) {
         this.endDate = event.target.value;
     }
 
-    // CLOSE MODAL
-    // closeModalDate() {
-    //     this.showBookingModal = false;
-    // }
-
-    // CONFIRM BOOKING
     confirmBooking() {
-        this.isDataSelected = true;
+        if (!this.startDate) {
+            Toast.show({
+                label: 'Warning',
+                message: 'Please select a travel date before continuing.',
+                variant: 'warning'
+            });
+            return;
+        }
+
+        if (!this.endDate) {
+            Toast.show({
+                label: 'Warning',
+                message: 'Please select a valid travel date before continuing.',
+                variant: 'warning'
+            });
+            return;
+        }
+
+        console.log('Next clicked');
+        console.log('Package ID:', this.packageId || this.packageData?.Id);
+        console.log('Start Date:', this.startDate);
+        console.log('End Date:', this.endDate);
+
+        // Stay on the same page/component. Only change the visible step.
         this.showBookingModal = false;
-        console.log('hiiii-----');
-
-        console.log('selected' + this.isDataSelected);
-
-        //     createBooking({
-        //         packageId: this.packageId,
-        //         startDate: this.startDate,
-        //         endDate: this.endDate
-        //     })
-        //         .then(result => {
-
-        //             Toast.show({
-        //                 label: 'Success',
-        //                 message: 'Booking confirmed!',
-        //                 variant: 'success'
-        //             });
-
-        //         })
-        //         .catch(error => {
-        //             console.error('Booking error', error);
-
-        //             Toast.show({
-        //                 label: 'Error',
-        //                 message: 'Booking failed!',
-        //                 variant: 'error'
-        //             });
-        //         });
+        this.showPackageDetails = false;
+        this.showTravellers = true;
     }
 
     notifyBookingUpdate() {
-        const event = new CustomEvent('bookingupdate');
-        window.dispatchEvent(event);
+        window.dispatchEvent(new CustomEvent('bookingupdate'));
     }
 
-    today = new Date();
-
-    calendarDays = [];
-
     generateCalendar() {
-
         const year = this.today.getFullYear();
         const month = this.today.getMonth();
 
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
+        const days = [];
 
-        let days = [];
-
-        // Empty cells before first day
         for (let i = 0; i < firstDay.getDay(); i++) {
             days.push({
                 key: `empty-${i}`,
-                isEmpty: true
+                isEmpty: true,
+                className: 'day empty'
             });
         }
 
-        // Actual dates
         for (let i = 1; i <= lastDay.getDate(); i++) {
-
-            const fullDate =
-                `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
 
             let className = 'day';
 
@@ -206,66 +182,27 @@ export default class PackageDescription extends NavigationMixin(LightningElement
         }
 
         this.calendarDays = days;
-
         this.monthYear = firstDay.toLocaleString('default', {
             month: 'long',
             year: 'numeric'
         });
     }
 
-    handleDateSelect(event) {
-
-        const selectedDate =
-            event.currentTarget.dataset.date;
-
-        if (!this.availableDates.includes(selectedDate)) {
-            return;
-        }
-        // If same date clicked again, unselect it
-        if (this.startDate === selectedDate) {
-            this.startDate = null;
-            this.endDate = null;
-        } else {
-
-            this.startDate = selectedDate;
-            const duration =
-                parseInt(this.packageData.Days__c);
-
-            let endDate = new Date(selectedDate);
-
-            endDate.setDate(
-                endDate.getDate() + duration - 1
-            );
-
-            this.endDate =
-                endDate.toISOString().split('T')[0];
-        }
-
-
-
-
-        this.generateCalendar();
-    }
-
     previousMonth() {
-        this.today =
-            new Date(
-                this.today.getFullYear(),
-                this.today.getMonth() - 1,
-                1
-            );
-
+        this.today = new Date(
+            this.today.getFullYear(),
+            this.today.getMonth() - 1,
+            1
+        );
         this.generateCalendar();
     }
 
     nextMonth() {
-        this.today =
-            new Date(
-                this.today.getFullYear(),
-                this.today.getMonth() + 1,
-                1
-            );
-
+        this.today = new Date(
+            this.today.getFullYear(),
+            this.today.getMonth() + 1,
+            1
+        );
         this.generateCalendar();
     }
 }
